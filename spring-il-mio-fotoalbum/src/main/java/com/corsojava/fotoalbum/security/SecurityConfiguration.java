@@ -19,7 +19,7 @@ public class SecurityConfiguration {
 
 		String[] allRoles = { "USER", "ADMIN" };
 
-		http.authorizeHttpRequests()
+		http.csrf().disable().authorizeHttpRequests()
 				.requestMatchers("/photos/edit", "/photos/edit/**", "/photo/create", "/photo/create/**")
 				.hasAuthority("ADMIN").requestMatchers(HttpMethod.POST, "/photos/**").hasAuthority("ADMIN")
 				.requestMatchers("/categories", "/categories/**").hasAuthority("ADMIN")

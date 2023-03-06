@@ -55,7 +55,28 @@
 				</form>
 			</div>
 		</div>
-	</div>
+
+		<div class="mt-5">
+			<h3 class="mb-3">Comments:</h3>
+			<div th:each="comment, commentIndex : ${photo.comments}" class="mb-3">
+				<div class="card-header bg-light">
+					<h6 class="text-secondary mb-0">
+						<span>Username</span>: <span th:text="${comment.username}" />
+					</h6>
+					<p class="card-text">
+						<span th:text="${comment.content}" />
+					</p>
+				</div>
+				<form th:action="@{/photos/{id}/deletecomment(id=${photo.id})}" method="post">
+					<input type="hidden" name="commentId" th:value="${comment.id}" />
+					<button type="submit" class="btn btn-danger"
+						onclick="return confirm('do you want to delete the comment?');">Delete</button>
+				</form>
+				<div th:if="${#lists.isEmpty(photo.comments)}">
+					<p>there are no comments</p>
+				</div>
+			</div>
+		</div>
 </body>
 
 </html>

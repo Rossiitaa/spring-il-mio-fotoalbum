@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.corsojava.fotoalbum.model.Photo;
 import com.corsojava.fotoalbum.repository.CategoryRepository;
+import com.corsojava.fotoalbum.repository.CommentRepository;
 import com.corsojava.fotoalbum.repository.PhotoRepository;
 
 import jakarta.validation.Valid;
@@ -30,12 +31,15 @@ public class PhotoController {
 
 	@Autowired
 	CategoryRepository categoryRepository;
+	
+	@Autowired
+	CommentRepository commentRepository;
 
 	@GetMapping
 	public String index(Model model) {
 		List<Photo> photoList = photoRepository.findAll();
 		model.addAttribute("photos", photoList);
-		return "photos/indexPhoto";
+		return "photos/index";
 	}
 
 	@GetMapping("/{id}")
@@ -44,7 +48,7 @@ public class PhotoController {
 		if (optionalPhoto.isPresent()) {
 			Photo photo = optionalPhoto.get();
 			model.addAttribute("photo", photo);
-			return "photos/showPhoto";
+			return "photos/show";
 		} else {
 			return "redirect:/photos";
 		}
@@ -55,7 +59,7 @@ public class PhotoController {
 		Photo photo = new Photo();
 		model.addAttribute("photo", photo);
 		model.addAttribute("categories", categoryRepository.findAll());
-		return "photos/createPhoto";
+		return "photos/create";
 	}
 
 	@PostMapping("/create")
@@ -64,7 +68,7 @@ public class PhotoController {
 
 		if (bindigResult.hasErrors()) {
 			model.addAttribute("categories", categoryRepository.findAll());
-			return "photos/createPhoto";
+			return "photos/create";
 		}
 
 		photo.setVisible(isVisible);
@@ -80,7 +84,7 @@ public class PhotoController {
 			Photo photo = optionalPhoto.get();
 			model.addAttribute("photo", photo);
 			model.addAttribute("categories", categoryRepository.findAll());
-			return "photos/editPhoto";
+			return "photos/edit";
 		} else {
 			return "redirect:/photos";
 		}
@@ -98,11 +102,11 @@ public class PhotoController {
 		if (bindingResult.hasErrors()) {
 			List<Category> categories = categoryRepository.findAll();
 			model.addAttribute("categories", categories);
-			return "photos/editPhoto";
+			return "photos/edit";
 		}
 
 		photoRepository.save(photoForm);
-		return "redirect:/photos";
+		return "redirect:/photos/" + id;
 	}
 
 	@PostMapping("/delete/{id}")
@@ -115,6 +119,29 @@ public class PhotoController {
 		} else {
 			return "redirect:/photos";
 		}
+	}
+	
+	
+	
+	@GetMapping("/searchByTitle")
+	public String searchByTitle(@RequestParam("title") String title, Model model) {
+		List<Photo> photos = photoRepository.findByTitleContainingIgnoreCase(title);
+		model.addAttribute("photos", photos);
+		return "photos/index";
+	}
+
+	@GetMapping("/searchByTag")
+	public String searchByTag(@RequestParam("tag") String tag, Model model) {
+		List<Photo> photos = photoRepository.findByTagContainingIgnoreCase(tag);
+		model.addAttribute("photos", photos);
+		return "photos/index";
+	}
+
+	
+	@PostMapping("/{id}/deletecomment")
+	public String deleteComment(@PathVariable("id") Integer id, @RequestParam("commentId") Integer commentId) {
+		commentRepository.deleteById(commentId);
+		return "redirect:/photos/" + id;
 	}
 
 }

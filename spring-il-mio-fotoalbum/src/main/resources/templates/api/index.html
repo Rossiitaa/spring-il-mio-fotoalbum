@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Photo Gallery</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}" />
+	<script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}" defer></script>
+</head>
+
+<body>
+
+	<header>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+			<div class="container">
+				<a class="navbar-brand" href="#">Photo Gallery</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+					aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+					<ul class="navbar-nav me-auto mb-2 mb-md-0">
+						<li class="nav-item">
+							<a class="nav-link" href="/mygallery">Gallery</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<div class="container mt-5 pt-4">
+		<h1 class="mb-4">Gallery</h1>
+		<div class="row">
+			<div class="col-md-6">
+				<input type="text" id="search-input" class="form-control mb-4"
+					placeholder="Search a photo by title or tags">
+			</div>
+		</div>
+		<div class="row" id="photo-list"></div>
+	</div>
+</body>
+
+</html>
